@@ -12,6 +12,20 @@ class App extends Component {
     number: '',
   };
 
+  componentDidMount() {
+    const savedContacts = localStorage.getItem('contacts');
+
+    if (savedContacts) {
+      this.setState({ contacts: JSON.parse(savedContacts) });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   setFilter = value => {
     console.log('Filter Value:', value);
     this.setState({ filter: value });
@@ -45,18 +59,7 @@ class App extends Component {
     );
 
     return (
-      <div
-        className={styles.container}
-        style={{
-          height: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column',
-          fontSize: 16,
-          color: '#010101',
-        }}
-      >
+      <div className={styles.container}>
         <div>
           <h1>Agenda de Contactos</h1>
           <ContactForm addContact={this.addContact} />
